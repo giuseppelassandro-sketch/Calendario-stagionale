@@ -30,6 +30,7 @@ BASKET = [
  ("Vanguard Total US","VTI","ETF"),("Nasdaq 100","QQQ","ETF"),("Vanguard Growth","VUG","ETF"),
  ("Vanguard Dev.Mkts","VEA","ETF"),("iShares EAFE","IEFA","ETF"),("Vanguard Value","VTV","ETF"),
  ("Vanguard Total Bond","BND","ETF"),
+ ("Bitcoin","BTC-USD","Crypto"),
 ]
 
 def fetch(tk):
@@ -193,7 +194,7 @@ page=f'''<title>Calendario Stagionale — Paniere Globale</title><style>{CSS}</s
 <div class="wrap"><div class="mast"><div class="eyebrow">Analisi Quantitativa · Selezione per Affidabilità</div>
 <h1>Calendario Stagionale del Paniere Globale</h1>
 <p class="sub">Per ogni giorno della prossima settimana, il titolo con il pattern stagionale statisticamente più solido — de-trendizzato e validato con t-test. I giorni senza segnale affidabile sono marcati.</p>
-<div class="meta-strip"><span class="chip"><b>{len(series)}</b> strumenti (USA · Europa · Italia · Asia · ETF)</span>
+<div class="meta-strip"><span class="chip"><b>{len(series)}</b> strumenti (USA · Europa · Italia · Asia · ETF · Crypto)</span>
 <span class="chip">De-trend + <b>t-test</b> 20a</span><span class="chip">Selezione: <b>miglior p-value</b> (extra-rend&gt;0)</span>
 <span class="chip">Aggiornato <b>{today.strftime("%d/%m/%Y")}</b></span><span class="chip">Settimana <b>{sett}</b></span></div></div>
 <div class="cards">{"".join(cards)}</div>
