@@ -1,0 +1,49 @@
+name: Calendario Stagionale Settimanale
+
+on:
+  schedule:
+    - cron: '0 16 * * 0'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repository
+        uses: actions/checkout@v4
+      - name: Installa Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installa le dipendenze
+        run: pip install pandas scipy numpy
+      - name: Genera il calendario
+        run: python seasonal_all.py
+      - name: Prepara la cartella del sito
+        run: |
+          mkdir -p site
+          cp calendario.html site/index.html
+      - name: Carica l'artifact per Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Pubblica su GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
