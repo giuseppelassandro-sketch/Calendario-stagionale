@@ -21,6 +21,11 @@ BASKET = [
  ("Tencent","0700.HK","Asia"),("Infosys","INFY","Asia"),
  ("Enel","ENEL.MI","Italia"),("Eni","ENI.MI","Italia"),("Intesa Sanpaolo","ISP.MI","Italia"),
  ("Generali","G.MI","Italia"),("UniCredit","UCG.MI","Italia"),("Campari","CPR.MI","Italia"),
+ ("Berkshire Hathaway","BRK-B","USA"),("Eli Lilly","LLY","USA"),("Oracle","ORCL","USA"),
+ ("Visa","V","USA"),("Mastercard","MA","USA"),("Chevron","CVX","USA"),("Bank of America","BAC","USA"),
+ ("Costco","COST","USA"),("Netflix","NFLX","USA"),
+ ("Meta","META","USA"),("Tesla","TSLA","USA"),("Broadcom","AVGO","USA"),
+ ("Roche","RHHBY","Europa"),("AstraZeneca","AZN","Europa"),
 ]
 
 def fetch(tk):
@@ -40,7 +45,9 @@ nextmon=today+dt.timedelta(days=(7-today.weekday()) or 7)
 TARGETS=[nextmon+dt.timedelta(days=i) for i in range(5)]
 WD=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì"]
 LAST=nextmon.year-1
-WINDOWS=[("10a",LAST-9,LAST,0.40,7),("15a",LAST-14,LAST,0.35,10),("20a",LAST-19,LAST,0.25,14)]
+# soglia minima osservazioni per finestra abbassata a 10 sulla 20a: include mega-cap piu' giovani
+# (Meta 2012, Tesla 2010, Broadcom 2009) usando lo storico disponibile
+WINDOWS=[("10a",LAST-9,LAST,0.40,7),("15a",LAST-14,LAST,0.35,8),("20a",LAST-19,LAST,0.25,10)]
 TOL=pd.Timedelta(days=4)
 print(f"Settimana target {TARGETS[0]} -> {TARGETS[-1]}  (finestre fino {LAST})")
 
@@ -187,7 +194,7 @@ page=f'''<title>Calendario Stagionale — Paniere Globale</title><style>{CSS}</s
 <span class="chip">Aggiornato <b>{today.strftime("%d/%m/%Y")}</b></span><span class="chip">Settimana <b>{sett}</b></span></div></div>
 <div class="cards">{"".join(cards)}</div>
 <div class="foot"><div><h3>Metodologia</h3><p>Per ogni titolo e giorno di calendario si prende il rendimento giornaliero (chiusura/chiusura, prezzi adjusted) del giorno di borsa più vicino (±4gg) negli ultimi 20 anni; si sottrae il rendimento medio del titolo nella finestra (de-trending) ottenendo il rendimento in eccesso. Il t-test (due code, campione 20a) misura se l'extra-rendimento è diverso da zero. Selezione = miglior p-value tra i titoli con extra-rendimento positivo. Fonte: Yahoo Finance.</p></div>
-<div class="warn"><h3 style="color:var(--accent)">Avvertenza</h3><p>Studio statistico retrospettivo a fini informativi/educativi, <b>non</b> consulenza finanziaria. Campioni piccoli (fino a 20 osservazioni), forte rischio di test multiplo (34 titoli × 5 giorni ≈ 170 test: ~8 falsi positivi attesi a p&lt;0.05), survivorship bias del paniere. La stagionalità passata non predice i rendimenti futuri.</p></div></div></div>'''
+<div class="warn"><h3 style="color:var(--accent)">Avvertenza</h3><p>Studio statistico retrospettivo a fini informativi/educativi, <b>non</b> consulenza finanziaria. Campioni piccoli (fino a 20 osservazioni), forte rischio di test multiplo ({len(series)} titoli × 5 giorni ≈ {len(series)*5} test: ~{int(len(series)*5*0.05)} falsi positivi attesi a p&lt;0.05), survivorship bias del paniere. La stagionalità passata non predice i rendimenti futuri.</p></div></div></div>'''
 
 path=os.path.join(OUT,"calendario.html")
 open(path,"w").write(page)
