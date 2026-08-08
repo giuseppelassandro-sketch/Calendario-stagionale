@@ -26,6 +26,10 @@ BASKET = [
  ("Costco","COST","USA"),("Netflix","NFLX","USA"),
  ("Meta","META","USA"),("Tesla","TSLA","USA"),("Broadcom","AVGO","USA"),
  ("Roche","RHHBY","Europa"),("AstraZeneca","AZN","Europa"),
+ ("Vanguard S&P500","VOO","ETF"),("SPDR S&P500","SPY","ETF"),("iShares S&P500","IVV","ETF"),
+ ("Vanguard Total US","VTI","ETF"),("Nasdaq 100","QQQ","ETF"),("Vanguard Growth","VUG","ETF"),
+ ("Vanguard Dev.Mkts","VEA","ETF"),("iShares EAFE","IEFA","ETF"),("Vanguard Value","VTV","ETF"),
+ ("Vanguard Total Bond","BND","ETF"),
 ]
 
 def fetch(tk):
@@ -189,7 +193,7 @@ page=f'''<title>Calendario Stagionale — Paniere Globale</title><style>{CSS}</s
 <div class="wrap"><div class="mast"><div class="eyebrow">Analisi Quantitativa · Selezione per Affidabilità</div>
 <h1>Calendario Stagionale del Paniere Globale</h1>
 <p class="sub">Per ogni giorno della prossima settimana, il titolo con il pattern stagionale statisticamente più solido — de-trendizzato e validato con t-test. I giorni senza segnale affidabile sono marcati.</p>
-<div class="meta-strip"><span class="chip"><b>{len(series)}</b> titoli globali (USA · Europa · Italia · Asia)</span>
+<div class="meta-strip"><span class="chip"><b>{len(series)}</b> strumenti (USA · Europa · Italia · Asia · ETF)</span>
 <span class="chip">De-trend + <b>t-test</b> 20a</span><span class="chip">Selezione: <b>miglior p-value</b> (extra-rend&gt;0)</span>
 <span class="chip">Aggiornato <b>{today.strftime("%d/%m/%Y")}</b></span><span class="chip">Settimana <b>{sett}</b></span></div></div>
 <div class="cards">{"".join(cards)}</div>
